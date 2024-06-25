@@ -53,7 +53,7 @@ def generate_expression(depth):
         return Node(value=random.uniform(-100, 100))
     else:
         op = random.choice(["+", "-", "*", "/", "cos+",
-                            "cos-", "cos*", "cos/"])
+                            "sin+"])
         left = generate_expression(depth - 1)
         right = generate_expression(depth - 1)
         return Node(operation=op, left=left, right=right)
@@ -84,7 +84,7 @@ def crossover(parent1, parent2):
 # funkcija koja vrsi mutaciju nad genima u hromozomu
 def mutate(individual):
     if random.random() < 0.4:  # Sansa mutacije
-        individual.left.operation = random.choice(["+", "-", "*", "/"])
+        individual.left.operation = random.choice(["+", "-", "*", "/", "cos+", "sin+", "cos*"])
     else:
         individual.right.value = random.uniform(-100, 100)
     return individual
@@ -111,7 +111,7 @@ def evolve(population, X, y, generations=1000):
 if __name__ == "__main__":
     X = np.random.rand(100, 1)
     y = X + np.random.randn(100, 1) 
-    population_size = 50
+    population_size = 500
     depth = 6
     population = generate_population(population_size, depth)
     evolved_population = evolve(population, X, y)
@@ -119,7 +119,6 @@ if __name__ == "__main__":
 
     X_values = X
     Y_values = [best_individual.evaluate(x) for x in X]
-    # print("najbolja individua: " + best_individual)
     plt.scatter(X.squeeze(), y.squeeze())
     plt.plot(X_values, Y_values, 'r')
     plt.xlabel('X osa')
